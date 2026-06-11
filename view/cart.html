@@ -1,0 +1,560 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CodeLab Store</title>
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:Arial,sans-serif}
+:root{--bg:#0c0c0f;--surface:#141418;--card:#1a1a20;--border:#232329;--accent:#00e5a0;--text:#f0f0f0;--muted:#9ca3af}
+body{background:var(--bg);color:var(--text);min-height:100vh}
+body::before{content:"";position:fixed;inset:0;background-image:linear-gradient(rgba(0,229,160,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(0,229,160,.04) 1px,transparent 1px);background-size:50px 50px;z-index:0;pointer-events:none}
+.navbar{position:relative;z-index:2;display:flex;justify-content:space-between;align-items:center;padding:20px 45px;background:rgba(12,12,15,.92);border-bottom:1px solid var(--border)}
+.logo{color:white;text-decoration:none;font-size:28px;font-weight:bold}
+.logo span{color:var(--accent)}
+.nav-links{display:flex;gap:22px;flex-wrap:wrap}
+.nav-links a{color:var(--muted);text-decoration:none;font-weight:bold}
+.nav-links a:hover{color:var(--accent)}
+.hero,.section,.delivery-page,.payment-done-page,footer{position:relative;z-index:1}
+.hero{text-align:center;padding:70px 20px 40px}
+.hero h1{color:var(--accent);font-size:55px;margin-bottom:12px}
+.hero p{color:var(--muted);font-size:18px}
+.section{width:90%;max-width:1200px;margin:45px auto}
+.title{text-align:center;color:var(--accent);font-size:32px;margin-bottom:30px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:25px}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:18px;padding:25px;transition:.3s}
+.card:hover{transform:translateY(-6px);border-color:var(--accent);box-shadow:0 15px 35px rgba(0,229,160,.08)}
+.card-icon{font-size:42px;margin-bottom:14px}
+.card h3{font-size:22px;margin-bottom:12px}
+.card p{color:#bdbdbd;line-height:1.7;margin-bottom:18px}
+.price{color:var(--accent);font-size:26px;font-weight:bold;margin-bottom:15px}
+button,.btn{display:block;width:100%;padding:13px;border:none;border-radius:10px;background:var(--accent);color:black;font-weight:bold;cursor:pointer;text-align:center;text-decoration:none;margin-top:8px}
+.btn-outline{background:transparent;color:var(--accent);border:1px solid var(--accent)}
+button:hover,.btn:hover{opacity:.85}
+.cart-box{background:var(--surface);border:1px solid var(--border);border-radius:20px;padding:30px;margin-top:55px}
+.cart-box h2{color:var(--accent);margin-bottom:20px}
+.cart-item{display:flex;justify-content:space-between;align-items:center;padding:15px 0;border-bottom:1px solid var(--border)}
+.cart-item button{width:auto;background:#ff3b3b;color:white;padding:8px 14px}
+.total{display:flex;justify-content:space-between;font-size:24px;margin-top:20px;color:var(--accent);font-weight:bold}
+.payment-box{margin-top:25px;padding:20px;border:1px solid var(--border);border-radius:15px;background:#101014}
+.payment-box h3{color:var(--accent);margin-bottom:15px}
+.payment-box label{display:block;margin:12px 0;color:#ddd}
+.payment-box input{accent-color:var(--accent)}
+.delivery-page{display:none;width:90%;max-width:1100px;margin:60px auto}
+.payment-done-page{display:none;width:90%;max-width:760px;margin:70px auto}
+.delivery-card{background:var(--surface);border:1px solid var(--border);border-radius:24px;padding:35px;box-shadow:0 20px 50px rgba(0,0,0,.35)}
+.delivery-card h1{text-align:center;color:var(--accent);font-size:45px;margin-bottom:30px}
+.summary{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:18px;margin-bottom:45px}
+.summary-box{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:20px}
+.summary-icon{font-size:28px;margin-bottom:12px}
+.summary-box span{display:block;color:var(--muted);font-size:14px;margin-bottom:8px}
+.summary-box strong{color:white;font-size:18px}
+.cod{display:inline-block;background:var(--accent);color:black;padding:6px 12px;border-radius:20px;font-size:13px}
+.progress-line{height:8px;background:#2b2b32;border-radius:20px;overflow:hidden;margin:40px 0 35px}
+.progress-fill{height:100%;width:75%;background:linear-gradient(90deg,var(--accent),#00b8ff)}
+.steps{display:grid;grid-template-columns:repeat(5,1fr);gap:12px}
+.step{text-align:center}
+.step-icon{width:55px;height:55px;border-radius:50%;background:#2b2b32;color:white;border:1px solid var(--border);display:flex;align-items:center;justify-content:center;margin:0 auto 12px;font-size:24px}
+.step.active .step-icon{background:var(--accent);color:black;box-shadow:0 0 20px rgba(0,229,160,.35)}
+.step h4{font-size:14px;margin-bottom:5px}
+.step p{color:var(--muted);font-size:12px}
+.status{margin-top:35px;background:rgba(0,229,160,.08);border:1px solid rgba(0,229,160,.25);padding:25px;border-radius:15px}
+.status h2{color:var(--accent);margin-bottom:10px}
+.status p{color:#d1d5db;line-height:1.7}
+.action-btns{display:flex;gap:15px;flex-wrap:wrap;margin-top:30px}
+.action-btns a{width:auto;padding:13px 22px}
+.payment-done-card{background:var(--surface);border:1px solid var(--border);border-radius:24px;padding:38px;text-align:center;box-shadow:0 20px 50px rgba(0,0,0,.35)}
+.payment-success-icon{width:85px;height:85px;border-radius:50%;background:var(--accent);color:black;display:flex;align-items:center;justify-content:center;margin:0 auto 22px;font-size:45px;font-weight:bold;box-shadow:0 0 30px rgba(0,229,160,.35)}
+.payment-done-card h1{color:var(--accent);font-size:42px;margin-bottom:12px}
+.payment-done-card p{color:#d1d5db;line-height:1.7;margin-bottom:18px}
+.payment-info{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:20px;margin:24px 0;text-align:left}
+.payment-info div{display:flex;justify-content:space-between;gap:15px;border-bottom:1px solid var(--border);padding:12px 0;color:#ddd}
+.payment-info div:last-child{border-bottom:none}
+.payment-info span{color:var(--muted)}
+.payment-info strong{color:white;text-align:right}
+footer{text-align:center;padding:30px;border-top:1px solid var(--border);color:var(--muted);margin-top:60px}
+
+.checkout-modal{position:fixed;inset:0;background:rgba(0,0,0,.78);display:none;justify-content:center;align-items:center;z-index:9999;padding:20px}
+.checkout-form{width:460px;max-width:100%;background:var(--surface);border:1px solid var(--border);border-radius:22px;padding:28px;box-shadow:0 25px 70px rgba(0,0,0,.55)}
+.checkout-form h2{color:var(--accent);margin-bottom:10px;text-align:center}
+.checkout-form p{color:var(--muted);text-align:center;margin-bottom:20px;line-height:1.6}
+.checkout-form input,.checkout-form textarea{width:100%;padding:13px;margin-bottom:14px;background:#0c0c0f;border:1px solid var(--border);border-radius:10px;color:white;outline:none}
+.checkout-form input:focus,.checkout-form textarea:focus{border-color:var(--accent)}
+.checkout-form textarea{height:95px;resize:none}
+.form-actions{display:flex;gap:12px}
+.form-actions button{margin-top:0}
+.form-actions .cancel-btn{background:transparent;color:var(--accent);border:1px solid var(--accent)}
+
+@media(max-width:768px){
+.navbar{flex-direction:column;gap:15px;padding:20px}
+.hero h1{font-size:38px}
+.steps{grid-template-columns:1fr}
+.step{display:flex;align-items:center;text-align:left;gap:15px}
+.step-icon{margin:0}
+.cart-item{flex-direction:column;align-items:flex-start;gap:10px}
+}
+</style>
+</head>
+
+<body>
+
+<nav class="navbar">
+    <a href="/" class="logo">Code<span>Lab</span></a>
+    <div class="nav-links">
+        <a href="/">Home</a>
+        <a href="#notes">Notes</a>
+        <a href="#lectures">Lectures</a>
+        <a href="#cart">Cart</a>
+        <a href="/about">About</a>
+    </div>
+</nav>
+
+<div id="storePage">
+
+<section class="hero">
+    <h1>Notes & Lectures</h1>
+    <p>Buy premium notes and access free YouTube learning lectures.</p>
+</section>
+
+<section class="section" id="notes">
+    <h2 class="title">Premium Notes</h2>
+
+    <div class="grid">
+        <div class="card">
+            <div class="card-icon">🌐</div>
+            <h3>Web Development Notes</h3>
+            <p>HTML, CSS, JavaScript and Node.js complete beginner-friendly notes.</p>
+            <div class="price">₹99</div>
+            <button onclick="buyNow('Web Development Notes',99)">Buy Now</button>
+            <button class="btn-outline" onclick="addToCart('Web Development Notes',99)">Add to Cart</button>
+        </div>
+
+        <div class="card">
+            <div class="card-icon">🚀</div>
+            <h3>Express.js Notes</h3>
+            <p>Routes, middleware, MVC, REST API and dynamic routing explained.</p>
+            <div class="price">₹99</div>
+            <button onclick="buyNow('Express.js Notes',99)">Buy Now</button>
+            <button class="btn-outline" onclick="addToCart('Express.js Notes',99)">Add to Cart</button>
+        </div>
+
+        <div class="card">
+            <div class="card-icon">🍃</div>
+            <h3>MongoDB Notes</h3>
+            <p>NoSQL database, collections, documents, CRUD and Mongoose guide.</p>
+            <div class="price">₹99</div>
+            <button onclick="buyNow('MongoDB Notes',99)">Buy Now</button>
+            <button class="btn-outline" onclick="addToCart('MongoDB Notes',99)">Add to Cart</button>
+        </div>
+
+        <div class="card">
+            <div class="card-icon">📦</div>
+            <h3>Complete Notes Bundle</h3>
+            <p>Web Development, Express.js, MongoDB and frontend notes together.</p>
+            <div class="price">₹299</div>
+            <button onclick="buyNow('Complete Notes Bundle',299)">Buy Now</button>
+            <button class="btn-outline" onclick="addToCart('Complete Notes Bundle',299)">Add to Cart</button>
+        </div>
+    </div>
+</section>
+
+<section class="section" id="lectures">
+    <h2 class="title">Free YouTube Lectures</h2>
+
+    <div class="grid">
+        <div class="card">
+            <div class="card-icon">🌐</div>
+            <h3>HTML Full Course</h3>
+            <p>Learn HTML tags, forms, tables, semantic tags and website structure.</p>
+            <a class="btn" href="https://www.youtube.com/watch?v=HcOc7P5BMi4&t=11s" target="_blank">Watch Now</a>
+        </div>
+
+        <div class="card">
+            <div class="card-icon">🎨</div>
+            <h3>CSS Full Course</h3>
+            <p>Learn CSS styling, flexbox, grid, animations and responsive design.</p>
+            <a class="btn" href="https://www.youtube.com/results?search_query=css+full+course" target="_blank">Watch Now</a>
+        </div>
+
+        <div class="card">
+            <div class="card-icon">⚡</div>
+            <h3>JavaScript Full Course</h3>
+            <p>Understand variables, loops, functions, DOM, events and ES6 concepts.</p>
+            <a class="btn" href="https://www.youtube.com/results?search_query=javascript+full+course" target="_blank">Watch Now</a>
+        </div>
+
+        <div class="card">
+            <div class="card-icon">🟢</div>
+            <h3>Node.js Full Course</h3>
+            <p>Learn backend development, npm, modules, APIs and server creation.</p>
+            <a class="btn" href="https://www.youtube.com/results?search_query=node+js+full+course" target="_blank">Watch Now</a>
+        </div>
+
+        <div class="card">
+            <div class="card-icon">🚀</div>
+            <h3>Express.js Full Course</h3>
+            <p>Learn routing, middleware, REST APIs, MVC architecture and dynamic routes.</p>
+            <a class="btn" href="https://www.youtube.com/results?search_query=express+js+full+course" target="_blank">Watch Now</a>
+        </div>
+
+        <div class="card">
+            <div class="card-icon">🍃</div>
+            <h3>MongoDB Full Course</h3>
+            <p>Learn collections, documents, CRUD operations, Compass and Mongoose.</p>
+            <a class="btn" href="https://www.youtube.com/results?search_query=mongodb+full+course" target="_blank">Watch Now</a>
+        </div>
+
+        <div class="card">
+            <div class="card-icon">⚛️</div>
+            <h3>React.js Full Course</h3>
+            <p>Learn components, props, state, hooks, routing and API integration.</p>
+            <a class="btn" href="https://www.youtube.com/results?search_query=react+js+full+course" target="_blank">Watch Now</a>
+        </div>
+
+        <div class="card">
+            <div class="card-icon">🐍</div>
+            <h3>Python Full Course</h3>
+            <p>Learn Python basics, loops, functions, OOP and file handling.</p>
+            <a class="btn" href="https://www.youtube.com/results?search_query=python+full+course" target="_blank">Watch Now</a>
+        </div>
+    </div>
+</section>
+
+<section class="section" id="cart">
+    <div class="cart-box">
+        <h2>Your Cart</h2>
+
+        <div id="cartItems">
+            <p style="color:#888;">Your cart is empty.</p>
+        </div>
+
+        <div class="total">
+            <span>Total</span>
+            <span id="cartTotal">₹0</span>
+        </div>
+
+        <div class="payment-box">
+            <h3>Select Payment Method</h3>
+
+            <label>
+                <input type="radio" name="payment" value="online" checked>
+                Online Payment with Google Pay / UPI
+            </label>
+
+            <label>
+                <input type="radio" name="payment" value="cod">
+                Cash on Delivery / Pay Later
+            </label>
+        </div>
+
+        <button onclick="openCheckoutForm()">Place Order</button>
+    </div>
+</section>
+
+</div>
+
+
+<div class="checkout-modal" id="checkoutModal">
+    <div class="checkout-form">
+        <h2>Checkout Details</h2>
+        <p>Please fill your details before payment.</p>
+
+        <input type="text" id="customerName" placeholder="Full Name">
+        <input type="email" id="customerEmail" placeholder="Email Address">
+        <input type="tel" id="customerPhone" placeholder="Mobile Number">
+        <textarea id="customerAddress" placeholder="Delivery Address"></textarea>
+
+        <div class="form-actions">
+            <button class="cancel-btn" onclick="closeCheckoutForm()">Cancel</button>
+            <button onclick="processCheckoutForm()">Continue to Payment</button>
+        </div>
+    </div>
+</div>
+
+<section class="payment-done-page" id="paymentDonePage">
+    <div class="payment-done-card">
+        <div class="payment-success-icon">✓</div>
+        <h1>Payment Done</h1>
+        <p>Your payment has been completed successfully. Now you can check your delivery status.</p>
+
+        <div class="payment-info">
+            <div>
+                <span>Customer</span>
+                <strong id="paymentCustomerName">Sumeet Prasad</strong>
+            </div>
+            <div>
+                <span>Payment Method</span>
+                <strong id="paymentDoneMethod">Google Pay / UPI</strong>
+            </div>
+            <div>
+                <span>Items</span>
+                <strong id="paymentDoneItems"></strong>
+            </div>
+            <div>
+                <span>Total Amount</span>
+                <strong id="paymentDoneTotal">₹0</strong>
+            </div>
+        </div>
+
+        <button onclick="openDeliveryStatus()">View Delivery Status</button>
+    </div>
+</section>
+
+<section class="delivery-page" id="deliveryPage">
+    <div class="delivery-card">
+        <h1>Delivery Status</h1>
+
+        <div class="summary">
+            <div class="summary-box">
+                <div class="summary-icon">🧾</div>
+                <span>Order ID</span>
+                <strong id="orderId">CL000000</strong>
+            </div>
+
+            <div class="summary-box">
+                <div class="summary-icon">👤</div>
+                <span>Customer</span>
+                <strong id="customerNameDisplay">Sumeet Prasad</strong>
+            </div>
+
+            <div class="summary-box">
+                <div class="summary-icon">💵</div>
+                <span>Payment</span>
+                <strong><span class="cod" id="paymentType">COD</span></strong>
+            </div>
+
+            <div class="summary-box">
+                <div class="summary-icon">📅</div>
+                <span>Expected Delivery</span>
+                <strong>12 June 2026</strong>
+            </div>
+        </div>
+
+        <div class="progress-line">
+            <div class="progress-fill"></div>
+        </div>
+
+        <div class="steps">
+            <div class="step active">
+                <div class="step-icon">✓</div>
+                <div>
+                    <h4>Ordered</h4>
+                    <p>Confirmed</p>
+                </div>
+            </div>
+
+            <div class="step active">
+                <div class="step-icon">📦</div>
+                <div>
+                    <h4>Packed</h4>
+                    <p>Prepared</p>
+                </div>
+            </div>
+
+            <div class="step active">
+                <div class="step-icon">🚚</div>
+                <div>
+                    <h4>Shipped</h4>
+                    <p>Dispatched</p>
+                </div>
+            </div>
+
+            <div class="step active">
+                <div class="step-icon">🛵</div>
+                <div>
+                    <h4>Out for Delivery</h4>
+                    <p>Arriving soon</p>
+                </div>
+            </div>
+
+            <div class="step">
+                <div class="step-icon">🏠</div>
+                <div>
+                    <h4>Delivered</h4>
+                    <p>Pending</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="status">
+            <h2>Current Status</h2>
+            <p>
+                Your order has been placed successfully and is currently out for delivery.
+                Our delivery partner will contact you shortly.
+            </p>
+            <p><strong>Items:</strong> <span id="orderedItems"></span></p>
+            <p><strong>Total:</strong> <span id="orderedTotal"></span></p>
+        </div>
+
+        <div class="action-btns">
+            <a href="/" class="btn">Back to Home</a>
+            <a href="/cart" class="btn btn-outline">Continue Shopping</a>
+        </div>
+    </div>
+</section>
+
+<footer>
+    © 2026 CodeLab. Premium Notes, Free Lectures and Order Tracking.
+</footer>
+
+<script>
+let cart = [];
+
+let customerDetails = {};
+let lastOrderData = {};
+
+function openCheckoutForm(){
+    if(cart.length === 0){
+        alert("Cart is empty");
+        return;
+    }
+
+    document.getElementById("checkoutModal").style.display = "flex";
+}
+
+function closeCheckoutForm(){
+    document.getElementById("checkoutModal").style.display = "none";
+}
+
+function processCheckoutForm(){
+    const name = document.getElementById("customerName").value.trim();
+    const email = document.getElementById("customerEmail").value.trim();
+    const phone = document.getElementById("customerPhone").value.trim();
+    const address = document.getElementById("customerAddress").value.trim();
+
+    if(!name || !email || !phone || !address){
+        alert("Please fill all checkout details");
+        return;
+    }
+
+    customerDetails = {name, email, phone, address};
+    closeCheckoutForm();
+    checkoutCart();
+}
+
+
+
+function addToCart(name, price){
+    if(cart.find(item => item.name === name)){
+        alert("Already added in cart");
+        return;
+    }
+    cart.push({name, price});
+    renderCart();
+    location.hash = "cart";
+}
+
+function buyNow(name, price){
+    cart = [{name, price}];
+    renderCart();
+    location.hash = "cart";
+}
+
+function removeItem(name){
+    cart = cart.filter(item => item.name !== name);
+    renderCart();
+}
+
+function renderCart(){
+    const cartItems = document.getElementById("cartItems");
+    const cartTotal = document.getElementById("cartTotal");
+
+    cartItems.innerHTML = "";
+
+    if(cart.length === 0){
+        cartItems.innerHTML = '<p style="color:#888;">Your cart is empty.</p>';
+        cartTotal.innerText = "₹0";
+        return;
+    }
+
+    let total = 0;
+
+    cart.forEach(item=>{
+        total += item.price;
+        cartItems.innerHTML += `
+            <div class="cart-item">
+                <div>
+                    <strong>${item.name}</strong><br>
+                    <span style="color:#00e5a0;">₹${item.price}</span>
+                </div>
+                <button onclick="removeItem('${item.name}')">Remove</button>
+            </div>
+        `;
+    });
+
+    cartTotal.innerText = "₹" + total;
+}
+
+function checkoutCart(){
+    if(cart.length === 0){
+        alert("Cart is empty");
+        return;
+    }
+
+    const method = document.querySelector('input[name="payment"]:checked').value;
+    const total = cart.reduce((sum,item)=>sum + item.price,0);
+    const names = cart.map(item=>item.name).join(", ");
+
+    if(method === "online"){
+        payWithGooglePay(total, names);
+    }else{
+        showPaymentDonePage("Cash on Delivery", names, total);
+    }
+}
+
+function payWithGooglePay(total, items){
+    /*
+      Direct redirect to upi:// can show a blank/grey page on desktop browsers.
+      So after Continue to Payment, we directly show the Payment Done page.
+      Later, if you want real UPI opening, you can add a separate UPI button.
+    */
+    showPaymentDonePage("Google Pay / UPI", items, total);
+}
+
+function showPaymentDonePage(paymentMethod, items, total){
+    lastOrderData = { paymentMethod, items, total };
+
+    document.getElementById("paymentCustomerName").innerText = customerDetails.name || "Sumeet Prasad";
+    document.getElementById("paymentDoneMethod").innerText = paymentMethod;
+    document.getElementById("paymentDoneItems").innerText = items;
+    document.getElementById("paymentDoneTotal").innerText = "₹" + total;
+
+    document.getElementById("storePage").style.display = "none";
+    document.getElementById("deliveryPage").style.display = "none";
+    document.getElementById("paymentDonePage").style.display = "block";
+
+    window.scrollTo(0,0);
+}
+
+function openDeliveryStatus(){
+    if(!lastOrderData.items){
+        alert("Order details not found");
+        return;
+    }
+
+    document.getElementById("paymentDonePage").style.display = "none";
+    showDeliveryPage(lastOrderData.paymentMethod, lastOrderData.items, lastOrderData.total);
+}
+
+function showDeliveryPage(paymentMethod, items, total){
+    const orderNumber = "CL" + Math.floor(100000 + Math.random() * 900000);
+
+    document.getElementById("orderId").innerText = orderNumber;
+    document.getElementById("paymentType").innerText = paymentMethod;
+    document.getElementById("customerNameDisplay").innerText = customerDetails.name || "Sumeet Prasad";
+    document.getElementById("orderedItems").innerText = items;
+    document.getElementById("orderedTotal").innerText = "₹" + total;
+
+    document.getElementById("storePage").style.display = "none";
+    document.getElementById("paymentDonePage").style.display = "none";
+    document.getElementById("deliveryPage").style.display = "block";
+
+    cart = [];
+    renderCart();
+    window.scrollTo(0,0);
+}
+</script>
+
+</body>
+</html>

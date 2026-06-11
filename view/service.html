@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Services</title>
+
+    <style>
+        *{
+            margin:0;
+            padding:0;
+            box-sizing:border-box;
+            font-family:Arial, sans-serif;
+        }
+
+        body{
+            background:#f4f4f4;
+        }
+
+        .service-page-header{
+            background:#222;
+            color:white;
+            text-align:center;
+            padding:30px;
+        }
+
+        .service-page-header h1{
+            font-size:40px;
+        }
+
+        .service-page-container{
+            width:90%;
+            max-width:1200px;
+            margin:50px auto;
+        }
+
+        .service-page-title{
+            text-align:center;
+            margin-bottom:40px;
+        }
+
+        .service-page-grid{
+            display:grid;
+            grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+            gap:25px;
+        }
+
+        .service-page-card{
+            background:white;
+            padding:25px;
+            border-radius:10px;
+            box-shadow:0 0 10px rgba(0,0,0,0.1);
+            transition:0.3s;
+        }
+
+        .service-page-card:hover{
+            transform:translateY(-5px);
+        }
+
+        .service-page-card h3{
+            margin-bottom:15px;
+            color:#007bff;
+        }
+
+        .service-page-card p{
+            color:#555;
+            line-height:1.6;
+        }
+
+        .service-page-footer{
+            background:#222;
+            color:white;
+            text-align:center;
+            padding:20px;
+            margin-top:50px;
+        }
+        .service-footer{
+    width:100%;
+    background:#1f1f1f;
+    color:#fff;
+    padding:60px 80px 20px;
+    margin-top:60px;
+}
+
+.service-footer-container{
+    max-width:1200px;
+    margin:auto;
+    display:flex;
+    justify-content:space-between;
+    flex-wrap:wrap;
+    gap:40px;
+}
+
+.service-footer-about{
+    flex:1;
+    min-width:250px;
+}
+
+.service-footer-about h2{
+    margin-bottom:15px;
+}
+
+.service-footer-about p{
+    color:#bdbdbd;
+    line-height:1.7;
+}
+
+.service-footer-links,
+.service-footer-services,
+.service-footer-contact{
+    min-width:180px;
+    display:flex;
+    flex-direction:column;
+}
+
+.service-footer-links h3,
+.service-footer-services h3,
+.service-footer-contact h3{
+    margin-bottom:15px;
+}
+
+.service-footer-links a,
+.service-footer-services a{
+    color:#bdbdbd;
+    text-decoration:none;
+    margin-bottom:10px;
+}
+
+.service-footer-links a:hover,
+.service-footer-services a:hover{
+    color:#fff;
+}
+
+.service-footer-contact p{
+    color:#bdbdbd;
+    margin-bottom:10px;
+}
+
+.service-footer-line{
+    border:none;
+    height:1px;
+    background:#444;
+    margin:35px 0 20px;
+}
+
+.service-footer-bottom{
+    max-width:1200px;
+    margin:auto;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    flex-wrap:wrap;
+}
+
+.service-footer-policy a{
+    color:#bdbdbd;
+    text-decoration:none;
+    margin-left:15px;
+}
+
+.service-footer-policy a:hover{
+    color:#fff;
+}
+
+@media(max-width:768px){
+
+    .service-footer{
+        padding:40px 20px;
+    }
+
+    .service-footer-bottom{
+        flex-direction:column;
+        gap:15px;
+        text-align:center;
+    }
+}
+    </style>
+</head>
+<body>
+
+    <header class="service-page-header">
+        <h1>Our Services</h1>
+    </header>
+
+    <section class="service-page-container">
+
+        <div class="service-page-title">
+            <h2>What We Offer</h2>
+            <p>Professional solutions for your business and projects.</p>
+        </div>
+
+        <div class="service-page-grid">
+
+            <div class="service-page-card">
+                <h3>Web Development</h3>
+                <p>
+                    Responsive and modern websites using HTML, CSS,
+                    JavaScript, Node.js, and Express.js.
+                </p>
+            </div>
+
+            <div class="service-page-card">
+                <h3>Frontend Development</h3>
+                <p>
+                    Beautiful and user-friendly interfaces with
+                    responsive design for all devices.
+                </p>
+            </div>
+
+            <div class="service-page-card">
+                <h3>Backend Development</h3>
+                <p>
+                    Secure server-side applications, APIs,
+                    authentication, and database integration.
+                </p>
+            </div>
+
+            <div class="service-page-card">
+                <h3>Database Management</h3>
+                <p>
+                    Efficient database design and management using
+                    MySQL and MongoDB.
+                </p>
+            </div>
+
+            <div class="service-page-card">
+                <h3>API Development</h3>
+                <p>
+                    RESTful API development and integration for
+                    web and mobile applications.
+                </p>
+            </div>
+
+            <div class="service-page-card">
+                <h3>Website Maintenance</h3>
+                <p>
+                    Continuous updates, performance optimization,
+                    and technical support.
+                </p>
+            </div>
+
+        </div>
+
+    </section>
+
+    <footer class="service-page-footer">
+        <footer class="service-footer">
+
+    <div class="service-footer-container">
+
+        <div class="service-footer-about">
+            <h2>My Website</h2>
+            <p>
+                We provide professional web development services,
+                modern UI/UX design, backend development, and
+                database solutions for businesses.
+            </p>
+        </div>
+
+        <div class="service-footer-links">
+            <h3>Quick Links</h3>
+
+            <a href="/">Home</a>
+            <a href="/about">About Us</a>
+            <a href="/services">Services</a>
+            <a href="/contact">Contact</a>
+        </div>
+
+        <div class="service-footer-services">
+            <h3>Our Services</h3>
+
+            <a href="#">Web Development</a>
+            <a href="#">Frontend Design</a>
+            <a href="#">Backend Development</a>
+            <a href="#">Database Management</a>
+        </div>
+
+        <div class="service-footer-contact">
+            <h3>Contact Info</h3>
+
+            <p>📍 Mumbai, India</p>
+            <p>📞 +91 98765 43210</p>
+            <p>✉️ info@mywebsite.com</p>
+        </div>
+
+    </div>
+
+    <hr class="service-footer-line">
+
+    <div class="service-footer-bottom">
+        <p>© 2026 My Website. All Rights Reserved.</p>
+
+        <div class="service-footer-policy">
+            <a href="#">Privacy Policy</a>
+            <a href="#">Terms & Conditions</a>
+        </div>
+    </div>
+
+</footer>
+    </footer>
+
+</body>
+</html>
